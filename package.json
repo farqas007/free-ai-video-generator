@@ -1,0 +1,19 @@
+{
+  "name": "free-ai-video-generator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Free AI video generator: text prompt -> real MP4 via a public Hugging Face Gradio Space (open-source video model).",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "check": "node --check server.js && node --check providers/video-provider.js && node --check providers/huggingface-space-provider.js && node --check public/app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Generate real AI videos from a text prompt using free, open-source models hosted on Hugging Face Spaces." />
+  <title>Free AI Video Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">&#9654;</span>
+        <span>Free AI Video Generator</span>
+      </div>
+      <a class="health" id="health" href="/api/health" title="Backend status">checking&hellip;</a>
+    </header>
+
+    <main>
+      <section class="card compose">
+        <label class="label" for="prompt">Describe the video to generate</label>
+        <textarea
+          id="prompt"
+          rows="5"
+          maxlength="1000"
+          spellcheck="false"
+          placeholder="e.g. A fluffy orange cat walks through a neon-lit futuristic city at sunset, cinematic lighting, slow camera pan, 5 seconds"
+        ></textarea>
+        <div class="row">
+          <button id="generate" type="button" class="button primary">Generate Video</button>
+          <span class="hint" id="chars">0 / 1000</span>
+        </div>
+      </section>
+
+      <section class="card status-card" id="statusCard" hidden>
+        <div class="status-head">
+          <span class="badge" id="statusBadge">queued</span>
+          <span class="status-label" id="statusLabel">Queued</span>
+        </div>
+        <p class="status-msg" id="statusMsg">Submitting&hellip;</p>
+      </section>
+
+      <section class="card error-card" id="errorCard" hidden role="alert">
+        <div class="error-title">Could not generate the video</div>
+        <p class="error-msg" id="errorMsg"></p>
+      </section>
+
+      <section class="card result-card" id="resultCard" hidden>
+        <video id="preview" controls playsinline preload="metadata"></video>
+        <div class="row">
+          <a id="download" class="button" download>Download MP4</a>
+          <span class="hint" id="fileInfo"></span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Real generation, remote inference: your prompt is sent to a public Hugging Face Space
+      running an open-source video model. No local model, no paid API, no fake progress.
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
