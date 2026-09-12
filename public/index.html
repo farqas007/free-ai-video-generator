@@ -3,30 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Generate real AI videos from a text prompt using free, open-source models hosted on Hugging Face Spaces." />
-  <title>Free AI Video Generator</title>
+  <meta name="description" content="Generate real AI videos from a text prompt using free, open-source video models." />
+  <title>AI Video Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <span class="logo" aria-hidden="true">&#9654;</span>
-        <span>Free AI Video Generator</span>
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" focusable="false"><path d="M8 5.14v13.72c0 .8.87 1.3 1.56.9l11-6.86a1.05 1.05 0 0 0 0-1.8l-11-6.86a1.05 1.05 0 0 0-1.56.9z"/></svg>
+        </span>
+        <span class="brand-name">AI Video Generator</span>
+        <span class="pill pill-free">Free AI</span>
       </div>
       <a class="health" id="health" href="/api/health" title="Backend status">checking&hellip;</a>
     </header>
 
     <main>
-      <section class="card compose">
-        <label class="label" for="prompt">Describe the video to generate</label>
+      <section class="hero">
+        <h1 class="hero-title">Create videos from your ideas</h1>
+        <p class="hero-sub">
+          Type a prompt and an open-source video model — running remotely and free to use —
+          turns it into a real MP4 clip. Generation is real and can take a minute or two.
+        </p>
+      </section>
+
+      <section class="card compose" aria-labelledby="workspace-title">
+        <h2 class="card-title" id="workspace-title">Generation workspace</h2>
+
+        <label class="label" for="prompt">Prompt</label>
         <textarea
           id="prompt"
-          rows="5"
+          rows="6"
           maxlength="1000"
           spellcheck="false"
-          placeholder="e.g. A fluffy orange cat walks through a neon-lit futuristic city at sunset, cinematic lighting, slow camera pan, 5 seconds"
+          placeholder="e.g. Cinematic neon gaming intro with pink and gold energy, glowing particles, dramatic camera movement, 2 seconds"
         ></textarea>
+        <div class="prompt-meta">
+          <span class="hint" id="chars">0 / 1000</span>
+        </div>
+
         <div class="options">
           <label class="field" for="aspectRatio">
             <span class="label">Aspect Ratio</span>
@@ -46,9 +63,21 @@
             </select>
           </label>
         </div>
+
         <div class="row">
-          <button id="generate" type="button" class="button primary">Generate Video</button>
-          <span class="hint" id="chars">0 / 1000</span>
+          <button id="generate" type="button" class="button primary button-generate">
+            Generate Video
+          </button>
+        </div>
+      </section>
+
+      <section class="examples" aria-labelledby="examples-title">
+        <h2 class="examples-title" id="examples-title">Try an example</h2>
+        <div class="example-group">
+          <button type="button" class="example" data-prompt="Cinematic neon gaming intro with pink and gold energy, glowing particles and dramatic camera movement">Neon gaming intro</button>
+          <button type="button" class="example" data-prompt="Futuristic city skyline at night with glowing neon lights reflecting on wet streets">Futuristic city at night</button>
+          <button type="button" class="example" data-prompt="Peaceful mountain landscape at sunrise with soft mist over a calm alpine lake">Mountain sunrise</button>
+          <button type="button" class="example" data-prompt="Sci-fi spaceship flying through a colorful nebula with star trails">Sci-fi nebula voyage</button>
         </div>
       </section>
 
@@ -58,25 +87,42 @@
           <span class="status-label" id="statusLabel">Queued</span>
         </div>
         <p class="status-msg" id="statusMsg">Submitting&hellip;</p>
+        <p class="status-note">
+          Generation runs on a shared remote service, so wait times vary. This status reflects
+          the real job state — no fake progress.
+        </p>
       </section>
 
       <section class="card error-card" id="errorCard" hidden role="alert">
-        <div class="error-title">Could not generate the video</div>
+        <p class="error-title">Could not generate the video</p>
         <p class="error-msg" id="errorMsg"></p>
+      </section>
+
+      <section class="empty-state" id="emptyState" aria-live="polite">
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false">
+            <rect x="2.5" y="5" width="19" height="13" rx="2.5"/>
+            <path d="m9 9 4.5 2.5L9 14z" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <p class="empty-title">Your generated video will appear here</p>
+        <p class="empty-text">Write a prompt and press Generate Video.</p>
       </section>
 
       <section class="card result-card" id="resultCard" hidden>
         <video id="preview" controls playsinline preload="metadata"></video>
-        <div class="row">
-          <a id="download" class="button" download>Download MP4</a>
-          <span class="hint" id="fileInfo"></span>
+        <div class="result-info">
+          <div class="result-meta" id="resultMeta"></div>
+          <div class="row">
+            <a id="download" class="button button-download" download>Download MP4</a>
+            <span class="hint" id="fileInfo"></span>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      Real generation, remote inference: your prompt is sent to a public Hugging Face Space
-      running an open-source video model. No local model, no paid API, no fake progress.
+      Real generation &middot; remote inference &middot; open-source model &middot; no paid API required
     </footer>
   </div>
   <script src="app.js"></script>
