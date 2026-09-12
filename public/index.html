@@ -27,6 +27,25 @@
           spellcheck="false"
           placeholder="e.g. A fluffy orange cat walks through a neon-lit futuristic city at sunset, cinematic lighting, slow camera pan, 5 seconds"
         ></textarea>
+        <div class="options">
+          <label class="field" for="aspectRatio">
+            <span class="label">Aspect Ratio</span>
+            <select id="aspectRatio">
+              <option value="832x480" selected>832x480</option>
+              <option value="480x832">480x832</option>
+              <option value="640x640">640x640</option>
+            </select>
+          </label>
+          <label class="field" for="duration">
+            <span class="label">Duration</span>
+            <select id="duration">
+              <option value="2" selected>2 seconds</option>
+              <option value="3">3 seconds</option>
+              <option value="4">4 seconds</option>
+              <option value="5">5 seconds</option>
+            </select>
+          </label>
+        </div>
         <div class="row">
           <button id="generate" type="button" class="button primary">Generate Video</button>
           <span class="hint" id="chars">0 / 1000</span>

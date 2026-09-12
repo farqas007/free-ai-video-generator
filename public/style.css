@@ -120,6 +120,49 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
 }
 
+select {
+  width: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 11px 12px;
+  padding-right: 34px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b93a7' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
+}
+select option {
+  background: var(--bg-soft);
+  color: var(--text);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 14px;
+}
+.options .field {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.options .field .label {
+  margin-bottom: 0;
+}
+
 .row {
   display: flex;
   align-items: center;
@@ -227,4 +270,5 @@ textarea:focus {
   .card { padding: 16px; }
   .button { width: 100%; }
   .row { flex-direction: column; align-items: stretch; }
+  .options { flex-direction: column; }
 }

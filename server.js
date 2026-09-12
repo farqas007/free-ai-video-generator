@@ -36,6 +36,8 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const PROMPT_MAX = 1000;
+const ASPECT_RATIOS = ['832x480', '480x832', '640x640'];
+const DURATION_SECONDS = [2, 3, 4, 5];
 
 // POST /api/videos - start a real video generation job.
 app.post('/api/videos', (req, res, next) => {
@@ -45,7 +47,32 @@ app.post('/api/videos', (req, res, next) => {
     if (prompt.length > PROMPT_MAX) {
       return res.status(400).json({ error: `Prompt must be ${PROMPT_MAX} characters or fewer.` });
     }
-    const job = provider.generate(prompt, {});
+
+    let aspectRatio = ASPECT_RATIOS[0];
+    if (req.body && req.body.aspect_ratio !== undefined) {
+      aspectRatio = String(req.body.aspect_ratio);
+      if (!ASPECT_RATIOS.includes(aspectRatio)) {
+        return res.status(400).json({
+          error: `Invalid "aspect_ratio". Allowed values: ${ASPECT_RATIOS.join(', ')}.`
+        });
+      }
+    }
+
+    let durationSeconds = DURATION_SECONDS[0];
+    if (req.body && req.body.duration_seconds !== undefined) {
+      durationSeconds = Number(req.body.duration_seconds);
+      if (!DURATION_SECONDS.includes(durationSeconds)) {
+        return res.status(400).json({
+          error: `Invalid "duration_seconds". Allowed values: ${DURATION_SECONDS.join(', ')}.`
+        });
+      }
+    }
+
+    const job = provider.generate(prompt, {
+      aspectRatio,
+      durationSeconds,
+      inputImage: null
+    });
     res.status(201).json(job);
   } catch (err) {
     next(err);

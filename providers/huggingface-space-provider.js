@@ -90,8 +90,9 @@ class HuggingFaceSpaceProvider extends VideoProvider {
     return null;
   }
 
-  generate(prompt, _options = {}) {
+  generate(prompt, options = {}) {
     const job = this.makeJob(prompt);
+    job.options = options || {};
     this.jobs.set(job.id, job);
 
     if (!this.isConfigured()) {
@@ -140,7 +141,12 @@ class HuggingFaceSpaceProvider extends VideoProvider {
       job
     );
     const sub = await this._withRetries(
-      () => this._submit(spaceUrl, endpoint, [job.prompt]),
+      () => this._submit(spaceUrl, endpoint, [
+        job.options?.inputImage ?? null,
+        job.prompt,
+        job.options?.aspectRatio || '832x480',
+        job.options?.durationSeconds || 2
+      ]),
       'Submitting prompt',
       job
     );

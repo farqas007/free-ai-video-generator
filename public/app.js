@@ -7,6 +7,8 @@
   const els = {
     prompt: document.getElementById('prompt'),
     chars: document.getElementById('chars'),
+    aspectRatio: document.getElementById('aspectRatio'),
+    duration: document.getElementById('duration'),
     generate: document.getElementById('generate'),
     health: document.getElementById('health'),
     statusCard: document.getElementById('statusCard'),
@@ -45,7 +47,7 @@
       showError('Please enter a text prompt first.');
       return;
     }
-    submitPrompt(prompt);
+    submitPrompt(prompt, els.aspectRatio.value, Number(els.duration.value));
   });
 
   async function refreshHealth() {
@@ -64,7 +66,7 @@
     }
   }
 
-  async function submitPrompt(prompt) {
+  async function submitPrompt(prompt, aspectRatio, durationSeconds) {
     stopPolling();
     hide('errorCard');
     hide('resultCard');
@@ -73,7 +75,11 @@
       const res = await fetch('/api/videos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({
+          prompt,
+          aspect_ratio: aspectRatio,
+          duration_seconds: durationSeconds
+        })
       });
       const data = await res.json();
       if (!res.ok) {
