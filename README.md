@@ -60,6 +60,48 @@ before you try to generate.
 | `VIDEO_PROVIDER` | no | Provider to use (default `huggingface-space`). |
 | `PORT` | no | HTTP port (default `3000`). |
 
+## Deploy to Render
+
+This is a plain Node.js/Express app with no database. Render provides the `PORT`
+environment variable automatically; the app already binds to `process.env.PORT`.
+
+> The **Hugging Face Space is the video-generation backend**. The app only relays
+> your prompt to a public Space, waits for the real job, and serves the generated
+> MP4. No GPU or model is needed on Render itself.
+
+### Option A - Blueprint (`render.yaml`)
+
+1. Push this repository to GitHub.
+2. In Render, create a new **Blueprint** from the repo. The included `render.yaml`
+   defines a free web service with build command `npm install` and start command
+   `npm start`, health-checked on `/api/health`.
+3. After the service is created, open **Environment** in the dashboard and set:
+   - `HF_SPACE_ID` to `owner/space-name` of a public video Space (required for real
+     generation), which Blueprint users set because `render.yaml` deliberately does
+     not hardcode it.
+   - `HF_SPACE_API_NAME`, `HF_SPACE_TIMEOUT_MS`, `HF_SPACE_RETRIES` (all optional).
+4. Restart the service. `GET <your-app>/api/health` must report
+   `"providerConfigured": true` before generation will work.
+
+### Option B - Manual web service
+
+1. Push this repository to GitHub.
+2. In Render, create a **New Web Service** and connect the repo.
+3. Use **Runtime** `Node`, **Build Command** `npm install`, **Start Command**
+   `npm start`, and set the **Health Check Path** to `/api/health`.
+4. Add the environment variables described in the table above and restart.
+
+### Notes for Render
+
+- **Keep `PORT` unset** - Render injects its own value; overriding it breaks startup.
+- Generated videos are stored on the instance filesystem under `output/`. Free
+  instances sleep after inactivity and the disk is ephemeral, so files can be lost on
+  restart, sleep, or redeploy. Treat it as a demo storage, not a library.
+- Generation is not instant or unlimited: free public Spaces can be busy, queued, or
+  rate-limited. The status area shows the real job state, never fake progress.
+- Do not deploy with sensitive or paid tokens unless you set them exclusively as
+  Render secret environment variables.
+
 ## API
 
 | Endpoint | Purpose |

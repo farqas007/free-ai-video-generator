@@ -1,0 +1,25 @@
+# Render Blueprint for the Free AI Video Generator (Node/Express web service).
+# Docs: https://render.com/docs/blueprint-spec
+#
+# HF_* values are left as dashboard-set placeholders (sync: false) so no space
+# ids or secrets are hardcoded in this tracked file. Set them inside Render
+# after the service is created, then restart the service.
+services:
+  - type: web
+    name: free-ai-video-generator
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: VIDEO_PROVIDER
+        value: huggingface-space
+      - key: HF_SPACE_ID
+        sync: false
+      - key: HF_SPACE_API_NAME
+        sync: false
+      - key: HF_SPACE_TIMEOUT_MS
+        sync: false
+      - key: HF_SPACE_RETRIES
+        sync: false
